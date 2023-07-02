@@ -1,5 +1,5 @@
 import React from 'react';
-import Options from './pages/Option'
+import Options from './pages/option'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
