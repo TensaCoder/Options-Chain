@@ -1,11 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Option from "./pages/Option";
 
 function App() {
   return (
-    <div className="App">
-      
-    </div>
+    <Option />
   );
 }
 
