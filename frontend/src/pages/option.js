@@ -14,32 +14,39 @@ const Option = () => {
     const [TTM, setTTM] = useState("06JUL23");
     const [optionType, setOptionType] = useState("CE")
 
-
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
             let currentData = dataArray[i];
-
-
             //  MAINIDX20JUL2318400PE
             //  MAINIDX
-            if (currentData.symbol.includes(symbol) != true) {
+            if (currentData.symbol.includes(symbol) !== true) {
                 continue;
             }
-            if (currentData.symbol.includes(TTM) != true){
+            if (currentData.symbol.includes(TTM) !== true) {
                 continue;
             }
-            if (currentData.symbol.includes(optionType) != true){
+            if (currentData.symbol.includes(optionType) !== true) {
                 continue;
             }
 
-            console.log("Symbol name : ", currentData.symbol)
-            setData(prevData => [...prevData, currentData])
+            console.log("Symbol name: ", currentData.symbol);
 
+            const exist_data = data.findIndex((item) => item.symbol === currentData.symbol);
 
-            
+            if (exist_data !== -1) {
+                setData((prevData) => {
+                    const newData = [...prevData];
+                    newData[exist_data] = currentData;
+                    return newData;
+                });
+            } else {
+
+                setData((prevData) => [...prevData, currentData]);
+            }
         }
-        console.log("Length : ", data)
-    }
+
+        console.log("Length: ", data);
+    };
 
     // setInterval(() => {
     //     for (let i = 0; i < data.length; i++) {
@@ -51,7 +58,7 @@ const Option = () => {
     //             setData(prevData => [...prevData, currentData])
     //         }
     //     }
-        
+
     // }, 40000);
 
     // useEffect(() => {
@@ -99,7 +106,7 @@ const Option = () => {
 
 
 
-            {data.map((item)=>{
+            {data.map((item) => {
                 return (
                     <p>
                         {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
