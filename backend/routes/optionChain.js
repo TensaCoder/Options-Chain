@@ -18,8 +18,7 @@ const io = require("socket.io")(4000, {
     }
 })
 
-
-router.get("/getdata", async (req, res) => {
+router.post("/getdata", async (req, res) => {
 
 
     clientSocket.connect(serverPort, serverAddress, () => {
@@ -33,7 +32,7 @@ router.get("/getdata", async (req, res) => {
 
 
     // indexSymbol = "MAINIDX20JUL23"
-    indexSymbol = req.query.symbol
+    indexSymbol = req.body.symbol;
     console.log("Index symbol : ", indexSymbol)
 
     // var logger = fs.createWriteStream('log.txt', {

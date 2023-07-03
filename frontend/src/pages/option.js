@@ -19,8 +19,10 @@ const Option = () => {
         for (let i = 0; i < dataArray.length; i++) {
             let currentData = dataArray[i];
 
-            if (currentData.symbol.includes(symbol) != true) {
 
+            //  MAINIDX20JUL2318400PE
+            //  MAINIDX
+            if (currentData.symbol.includes(symbol) != true) {
                 continue;
             }
             if (currentData.symbol.includes(TTM) != true){
