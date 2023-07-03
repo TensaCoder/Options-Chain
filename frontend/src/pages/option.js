@@ -14,6 +14,23 @@ const Option = () => {
     const [TTM, setTTM] = useState("06JUL23");
     const [optionType, setOptionType] = useState("CE")
 
+    // MAINIDX -> useState = [
+    //     {
+    //         "06JUL23":[
+    //             {}, 
+    //             {},
+
+    //         ]
+    //     },
+    //     {
+    //         "13JUL23":[
+    //             {},
+    //             {},
+
+    //         ]
+    //     }
+    // ]
+
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
             let currentData = dataArray[i];
