@@ -24,7 +24,7 @@ clientSocket.connect(serverPort, serverAddress, () => {
 clientSocket.on('data', (data) => {
   console.log("Data package length: " + data.length)
 
-  newData.push(...data); // Append the new data to the existing buffer
+  newData.push(...data); 
 
   while (newData.length >= 130) {
     const temp = newData.slice(0, 130);
