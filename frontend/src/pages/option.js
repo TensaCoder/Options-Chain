@@ -35,7 +35,7 @@ useEffect(() => {
         </div>
       ))
     ) : (
-      <p>{jsonData.symbol}</p>
+      <p></p>
     )}
     <p>Hello</p>
   </div>

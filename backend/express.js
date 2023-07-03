@@ -30,21 +30,77 @@ clientSocket.on('data', (data) => {
     const temp = newData.slice(0, 130);
     newData = newData.slice(130);
 
-    // Parse the data
-    const length = Buffer.from(temp.slice(0, 4)).readInt32LE(0);
-    const symbol = temp.slice(4, 34).toString('utf-8');
-    const sequenceNumber = Buffer.from(temp.slice(34, 42)).readBigInt64LE().toString();
-    const timeStamp = Buffer.from(temp.slice(42, 50)).readBigInt64LE().toString();
-    const LTP = Buffer.from(temp.slice(50, 58)).readBigInt64LE().toString();
-    const LTQ = Buffer.from(temp.slice(58, 66)).readBigInt64LE().toString();
-    const volume = Buffer.from(temp.slice(66, 74)).readBigInt64LE().toString();
-    const bidPrice = Buffer.from(temp.slice(74, 82)).readBigInt64LE().toString();
-    const bidQuantity = Buffer.from(temp.slice(82, 90)).readBigInt64LE().toString();
-    const askPrice = Buffer.from(temp.slice(90, 98)).readBigInt64LE().toString();
-    const askQuantity = Buffer.from(temp.slice(98, 106)).readBigInt64LE().toString();
-    const OI = Buffer.from(temp.slice(106, 114)).readBigInt64LE().toString();
-    const previousClosePrice = Buffer.from(temp.slice(114, 122)).readBigInt64LE().toString();
-    const previousOpenInterest = Buffer.from(temp.slice(122, 130)).readBigInt64LE().toString();
+    console.log(temp.length)
+    let length = Buffer.from(temp.slice(0, 4))
+
+    console.log(length)
+    length = length.readInt32LE(0);
+
+    console.log("length " +length);
+
+    let symbol = Buffer.from(temp.slice(4, 34));
+    symbol = symbol.toString('utf-8');
+    console.log("symbol "+ symbol)
+
+    let sequenceNumber = Buffer.from(temp.slice(34, 42));
+    sequenceNumber = sequenceNumber.readBigInt64LE();
+    sequenceNumber = sequenceNumber.toString()
+    console.log("seq no " +sequenceNumber)
+
+    let timeStamp = Buffer.from(temp.slice(42, 50));
+    timeStamp = timeStamp.readBigInt64LE();
+    timeStamp = timeStamp.toString()
+    console.log(timeStamp)
+
+    let LTP = Buffer.from(temp.slice(50, 58));
+    LTP = LTP.readBigInt64LE();
+    LTP = LTP.toString()
+    console.log("LTP : " + LTP)
+
+    let LTQ = Buffer.from(temp.slice(58, 66));
+    LTQ = LTQ.readBigInt64LE();
+    LTQ = LTQ.toString()
+    console.log("LTQ : " + LTQ)
+
+    let volume = Buffer.from(temp.slice(66, 74));
+    volume = volume.readBigInt64LE();
+    volume = volume.toString()
+    console.log("volume : " + volume)
+
+    let bidPrice = Buffer.from(temp.slice(74, 82));
+    bidPrice = bidPrice.readBigInt64LE();
+    bidPrice = bidPrice.toString()
+    console.log("bidPrice : " + bidPrice)
+
+    let bidQuantity = Buffer.from(temp.slice(82, 90));
+    bidQuantity = bidQuantity.readBigInt64LE();
+    bidQuantity = bidQuantity.toString()
+    console.log("bidQuantity : " + bidQuantity)
+
+    let askPrice = Buffer.from(temp.slice(90, 98));
+    askPrice = askPrice.readBigInt64LE();
+    askPrice = askPrice.toString()
+    console.log("askPrice : " + askPrice)
+
+    let askQuantity = Buffer.from(temp.slice(98, 106));
+    askQuantity = askQuantity.readBigInt64LE();
+    askQuantity = askQuantity.toString()
+    console.log("askQuantity : " + askQuantity)
+
+    let OI = Buffer.from(temp.slice(106, 114));
+    OI = OI.readBigInt64LE();
+    OI = OI.toString()
+    console.log("OI : " + OI)
+
+    let previousClosePrice = Buffer.from(temp.slice(114, 122));
+    previousClosePrice = previousClosePrice.readBigInt64LE();
+    previousClosePrice = previousClosePrice.toString()
+    console.log("previousClosePrice : " + previousClosePrice)
+
+    let previousOpenInterest = Buffer.from(temp.slice(122, 130));
+    previousOpenInterest = previousOpenInterest.readBigInt64LE();
+    previousOpenInterest = previousOpenInterest.toString()
+    console.log("previousOpenInterest : " + previousOpenInterest)
 
     const dataObject = {
       length,
