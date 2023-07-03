@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Options from './pages/Option'
+import Options from './pages/option'
 
 function App() {
   return (

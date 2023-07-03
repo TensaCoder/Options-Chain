@@ -17,9 +17,10 @@ const Option = () => {
     const [all, setall] = useState([])
     const [mid, setmid] = useState([])
     const [fin, setfin] = useState([])
+    let currentData=[]
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
-          let currentData = dataArray[i];
+          currentData = dataArray[i];
       
           if (!currentData.symbol.startsWith(symbol)) {
             continue;
@@ -33,8 +34,7 @@ const Option = () => {
       
           console.log("Symbol name: ", currentData.symbol);
 
-      
-        if(symbol.startsWith("MA")){
+        if(currentData.symbol.startsWith("MA")){
             const exist_data = main.findIndex((item) => item.symbol === currentData.symbol);
           if (exist_data !== -1) {
             setmain((prevData) => {
@@ -48,7 +48,7 @@ const Option = () => {
           }
         }
 
-        if(symbol.startsWith("A")){
+        else if(currentData.symbol.startsWith("A")){
             const exist_data = all.findIndex((item) => item.symbol === currentData.symbol);
             if (exist_data !== -1) {
               setall((prevData) => {
@@ -62,7 +62,7 @@ const Option = () => {
             }
           }
 
-          if(symbol.startsWith("MI")){
+          else if(currentData.symbol.startsWith("MI")){
             const exist_data = mid.findIndex((item) => item.symbol === currentData.symbol);
             if (exist_data !== -1) {
               setmid((prevData) => {
@@ -76,7 +76,7 @@ const Option = () => {
             }
           }
 
-          if(symbol.startsWith("F")){
+          else{
             const exist_data = fin.findIndex((item) => item.symbol === currentData.symbol);
             if (exist_data !== -1) {
               setfin((prevData) => {
@@ -90,8 +90,8 @@ const Option = () => {
             }
           }
 
-    }
-      
+    
+        }
         console.log("Length: ", data);
       };
 
@@ -144,7 +144,7 @@ const Option = () => {
   <option value="MI">MIDCAPS</option>
 </select>
 
-    {symbol === 'MA' && (
+    {symbol.startsWith("MA") && (
       <>
         {main.map((item) => (
           <p key={item.sequenceNumber}>
@@ -154,7 +154,7 @@ const Option = () => {
       </>
     )}
 
-    {symbol === 'F' && (
+    {symbol.startsWith("F") && (
       <>
         {fin.map((item) => (
           <p key={item.sequenceNumber}>
@@ -164,7 +164,7 @@ const Option = () => {
       </>
     )}
 
-    {symbol === 'A' && (
+    {symbol.startsWith("A") && (
       <>
         {all.map((item) => (
           <p key={item.sequenceNumber}>
@@ -174,7 +174,7 @@ const Option = () => {
       </>
     )}
 
-    {symbol === 'MI' && (
+    {symbol.startsWith("MI") && (
       <>
         {mid.map((item) => (
           <p key={item.sequenceNumber}>
