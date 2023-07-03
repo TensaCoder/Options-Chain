@@ -1,39 +1,44 @@
 import React, { useState, useEffect } from 'react';
+import { json } from 'react-router-dom';
 
 function Option() {
-  const [jsonData, setJsonData] = useState([]);
+  const [jsonData, setJsonData] = useState({});
+  const eventSource = new EventSource('http://localhost:5000/events');
 
-//   useEffect(() => {
-    // create event source
-    const eventSource = new EventSource('http://localhost:5000/events');
+useEffect(() => {
 
-    // handle message event
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      setJsonData(prevData => [...prevData, data]);
+      setJsonData(data);
     };
 
-    // handle connection errors
+
     eventSource.onerror = (error) => {
       console.error('EventSource failed:', error);
     };
+   console.log(jsonData)
 
-//     // clean up before component unmounts
-//     return () => {
-//       eventSource.close();
-//     };
+}, [jsonData])
 
-//   }, []);
+//   useEffect(() => {
+    // create event source
+
+
 
   return (
     <div>
-      {jsonData.map((item, index) => (
+    {Array.isArray(jsonData) ? (
+      jsonData.map((item, index) => (
         <div key={index}>
-          {/* Render the data fields */}
-          {/* Example: <p>{item.symbol}</p> */}
+          <p>{item.symbol}</p>
+          <p>{item.bidPrice}</p>
         </div>
-      ))}
-    </div>
+      ))
+    ) : (
+      <p>{jsonData.symbol}</p>
+    )}
+    <p>Hello</p>
+  </div>
   );
 }
 
