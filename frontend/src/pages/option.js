@@ -17,86 +17,59 @@ const Option = () => {
     const [all, setall] = useState([])
     const [mid, setmid] = useState([])
     const [fin, setfin] = useState([])
-    let currentData=[]
+
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
-          currentData = dataArray[i];
-      
-          if (!currentData.symbol.startsWith(symbol)) {
-            continue;
-          }
-          if (currentData.symbol.includes(TTM) !== true) {
-            continue;
-          }
-          if (currentData.symbol.includes(optionType) !== true) {
-            continue;
-          }
-      
-          console.log("Symbol name: ", currentData.symbol);
-
-        if(currentData.symbol.startsWith("MA")){
-            const exist_data = main.findIndex((item) => item.symbol === currentData.symbol);
-          if (exist_data !== -1) {
-            setmain((prevData) => {
-              const newData = [...prevData];
-              newData[exist_data] = currentData;
-              return newData;
-            });
-          } else {
-
-            setmain((prevData) => [...prevData, currentData]);
-          }
-        }
-
-        else if(currentData.symbol.startsWith("A")){
-            const exist_data = all.findIndex((item) => item.symbol === currentData.symbol);
-            if (exist_data !== -1) {
-              setall((prevData) => {
-                const newData = [...prevData];
-                newData[exist_data] = currentData;
-                return newData;
-              });
-            } else {
+            let currentData = dataArray[i];
     
-              setall((prevData) => [...prevData, currentData]);
+            if (currentData.symbol.startsWith("MA")) {
+                setmain(prevMain => {
+                    const index = prevMain.findIndex((item) => item.symbol === currentData.symbol);
+                    if (index !== -1) {
+                        return prevMain.map((item, itemIndex) => itemIndex === index ? currentData : item);
+                    } else {
+                        return [...prevMain, currentData];
+                    }
+                });
             }
-          }
-
-          else if(currentData.symbol.startsWith("MI")){
-            const exist_data = mid.findIndex((item) => item.symbol === currentData.symbol);
-            if (exist_data !== -1) {
-              setmid((prevData) => {
-                const newData = [...prevData];
-                newData[exist_data] = currentData;
-                return newData;
-              });
-            } else {
     
-              setmid((prevData) => [...prevData, currentData]);
+            else if (currentData.symbol.startsWith("A")) {
+                setall(prevAll => {
+                    const index = prevAll.findIndex((item) => item.symbol === currentData.symbol);
+                    if (index !== -1) {
+                        return prevAll.map((item, itemIndex) => itemIndex === index ? currentData : item);
+                    } else {
+                        return [...prevAll, currentData];
+                    }
+                });
             }
-          }
-
-          else{
-            const exist_data = fin.findIndex((item) => item.symbol === currentData.symbol);
-            if (exist_data !== -1) {
-              setfin((prevData) => {
-                const newData = [...prevData];
-                newData[exist_data] = currentData;
-                return newData;
-              });
-            } else {
     
-              setfin((prevData) => [...prevData, currentData]);
+            else if (currentData.symbol.startsWith("MI")) {
+                setmid(prevMid => {
+                    const index = prevMid.findIndex((item) => item.symbol === currentData.symbol);
+                    if (index !== -1) {
+                        return prevMid.map((item, itemIndex) => itemIndex === index ? currentData : item);
+                    } else {
+                        return [...prevMid, currentData];
+                    }
+                });
             }
-          }
-
-    
+            else if (currentData.symbol.startsWith("F")) {
+                setfin(prevFin => {
+                    const index = prevFin.findIndex((item) => item.symbol === currentData.symbol);
+                    if (index !== -1) {
+                        return prevFin.map((item, itemIndex) => itemIndex === index ? currentData : item);
+                    } else {
+                        return [...prevFin, currentData];
+                    }
+                });
+            }
         }
         console.log("Length: ", data);
-      };
+    };
 
 
-      
+
 
     // setInterval(() => {
     //     for (let i = 0; i < data.length; i++) {
@@ -108,7 +81,7 @@ const Option = () => {
     //             setData(prevData => [...prevData, currentData])
     //         }
     //     }
-        
+
     // }, 40000);
 
     // useEffect(() => {
@@ -136,55 +109,55 @@ const Option = () => {
 
     return (
         <>
-           <label for="option">Choose a symbol:</label>
-<select name="symbol" id="symbol" value={symbol} onChange={(event) => { setSymbol(event.target.value) }}>
-  <option value="MA">MAINIDX</option>
-  <option value="F">FINANCIALS</option>
-  <option value="A">ALLBANKS</option>
-  <option value="MI">MIDCAPS</option>
-</select>
+            <label for="option">Choose a symbol:</label>
+            <select name="symbol" id="symbol" value={symbol} onChange={(event) => { setSymbol(event.target.value) }}>
+                <option value="MA">MAINIDX</option>
+                <option value="F">FINANCIALS</option>
+                <option value="A">ALLBANKS</option>
+                <option value="MI">MIDCAPS</option>
+            </select>
 
-    {symbol.startsWith("MA") && (
-      <>
-        {main.map((item) => (
-          <p key={item.sequenceNumber}>
-            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-          </p>
-        ))}
-      </>
-    )}
+            {symbol === 'MA' && (
+                <>
+                    {main.map((item) => (
+                        <p>
+                            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
+                        </p>
+                    ))}
+                </>
+            )}
 
-    {symbol.startsWith("F") && (
-      <>
-        {fin.map((item) => (
-          <p key={item.sequenceNumber}>
-            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-          </p>
-        ))}
-      </>
-    )}
+            {symbol === 'F' && (
+                <>
+                    {fin.map((item) => (
+                        <p>
+                            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
+                        </p>
+                    ))}
+                </>
+            )}
 
-    {symbol.startsWith("A") && (
-      <>
-        {all.map((item) => (
-          <p key={item.sequenceNumber}>
-            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-          </p>
-        ))}
-      </>
-    )}
+            {symbol === 'A' && (
+                <>
+                    {all.map((item) => (
+                        <p>
+                            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
+                        </p>
+                    ))}
+                </>
+            )}
 
-    {symbol.startsWith("MI") && (
-      <>
-        {mid.map((item) => (
-          <p key={item.sequenceNumber}>
-            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-          </p>
-        ))}
-      </>
-    )}
-  </>
-);
-        }
+            {symbol === 'MI' && (
+                <>
+                    {mid.map((item) => (
+                        <p>
+                            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
+                        </p>
+                    ))}
+                </>
+            )}
+        </>
+    );
+}
 
 export default Option
