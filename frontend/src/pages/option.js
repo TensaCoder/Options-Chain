@@ -14,30 +14,38 @@ const Option = () => {
     const [TTM, setTTM] = useState("06JUL23");
     const [optionType, setOptionType] = useState("CE")
 
-
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
-            let currentData = dataArray[i];
+          let currentData = dataArray[i];
+      
+          if (currentData.symbol.includes(symbol) !== true) {
+            continue;
+          }
+          if (currentData.symbol.includes(TTM) !== true) {
+            continue;
+          }
+          if (currentData.symbol.includes(optionType) !== true) {
+            continue;
+          }
+      
+          console.log("Symbol name: ", currentData.symbol);
 
-            if (currentData.symbol.includes(symbol) != true) {
-
-                continue;
-            }
-            if (currentData.symbol.includes(TTM) != true){
-                continue;
-            }
-            if (currentData.symbol.includes(optionType) != true){
-                continue;
-            }
-
-            console.log("Symbol name : ", currentData.symbol)
-            setData(prevData => [...prevData, currentData])
-
-
-            
+          const exist_data = data.findIndex((item) => item.symbol === currentData.symbol);
+      
+          if (exist_data !== -1) {
+            setData((prevData) => {
+              const newData = [...prevData];
+              newData[exist_data] = currentData;
+              return newData;
+            });
+          } else {
+  
+            setData((prevData) => [...prevData, currentData]);
+          }
         }
-        console.log("Length : ", data)
-    }
+      
+        console.log("Length: ", data);
+      };
 
     // setInterval(() => {
     //     for (let i = 0; i < data.length; i++) {
