@@ -10,23 +10,69 @@ socket.on("connect", () => {
 const Option = () => {
 
     const [data, setData] = useState([])
-
-    useEffect(() => {
-
-        const callback = (data) => setData(prevData => [...prevData, data]);
-
-        socket.on("option-data", (jsonArray) => {
-            console.log(jsonArray)
-            callback(jsonArray)
-            console.log("Length : ", data.length)
-        })
+    const [symbol, setSymbol] = useState("MAINIDX")
+    const [TTM, setTTM] = useState("06JUL23");
+    const [optionType, setOptionType] = useState("CE")
 
 
-        return () => {
-            socket.off("option-data", callback);
-        };
-    }, [])
+    let cleanData = (dataArray) => {
+        for (let i = 0; i < dataArray.length; i++) {
+            let currentData = dataArray[i];
 
+            if (currentData.symbol.includes(symbol) != true) {
+
+                continue;
+            }
+            if (currentData.symbol.includes(TTM) != true){
+                continue;
+            }
+            if (currentData.symbol.includes(optionType) != true){
+                continue;
+            }
+
+            console.log("Symbol name : ", currentData.symbol)
+            setData(prevData => [...prevData, currentData])
+
+
+            
+        }
+        console.log("Length : ", data)
+    }
+
+    // setInterval(() => {
+    //     for (let i = 0; i < data.length; i++) {
+    //         let currentData = dataArray[i];
+    //         let timeStamp = currentData.timeStamp;
+
+    //         if (currentData.timeStamp) {
+    //             console.log("Symbol name : ", currentData.symbol)
+    //             setData(prevData => [...prevData, currentData])
+    //         }
+    //     }
+        
+    // }, 40000);
+
+    // useEffect(() => {
+
+    //     const callback = (datas) => {
+    //         setData(prevData => [...prevData, datas])
+    //         console.log("Setting the data usestate")
+    //     };
+
+
+
+    //     // return () => {
+    //     //     socket.off("option-data", callback);
+    //     // };
+    // }, [])
+
+    socket.on("option-data", (jsonArray) => {
+        // callback(jsonArray)
+        cleanData(jsonArray)
+        console.log("after cleanData function")
+        console.log(jsonArray)
+        // console.log("Length : ", data)
+    })
 
 
 
@@ -35,7 +81,22 @@ const Option = () => {
 
     return (
         <>
-            <div>option</div>
+            <div className='container'>
+                <form>
+                    <div className="mb-3">
+                        <label htmlFor="exampleInputEmail1" className="form-label">symbol name</label>
+                        <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={symbol} onChange={(event) => { setSymbol(event.target.value) }} />
+                    </div>
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                </form>
+
+
+
+
+            </div>
+
+
+
             {data.map((item)=>{
                 return (
                     <p>
