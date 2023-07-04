@@ -1,20 +1,20 @@
 import React from 'react'
-import Finance from 'financejs';
 import IV from 'implied-volatility'
+var bs = require("black-scholes");
 
 const moment = require('moment');
 
 function Table(props) {
-
-  const finance = new Finance();
+   let newDataframe=[]
+   let originalDataframe=[]
   try {
     console.log(props.data)
     const jsonData = props.data;
     // Extract rows with symbols ending in "PE" into a new dataframe
-    const newDataframe = jsonData.filter(row => row.symbol.endsWith('PE'));
+     newDataframe = jsonData.filter(row => row.symbol.endsWith('PE'));
 
     // Keep rows with symbols ending in "CE" in the original dataframe
-    const originalDataframe = jsonData.filter(row => row.symbol.endsWith('CE'));
+     originalDataframe = jsonData.filter(row => row.symbol.endsWith('CE'));
 
     // Calculate strike price for each row
     calculateStrikePrice(newDataframe);
@@ -108,19 +108,20 @@ function extractExpiryDate(dataframe) {
     for (let i = 0; i < dataframe.length; i++) {
       const row = dataframe[i];
       const timeToMaturity = calculateTimeToMaturity(row.expiryDate, row.timestamp);
+      console.log(row.timestamp)
 
       if (timeToMaturity <= 0) {
         row.impliedVolatility = 0; // TTM is negative, implied volatility is 0
       } else {
-        const optionPrice = row.LTP; // Assuming the observed market price is the option price
+        // const optionPrice = row.LTP; // Assuming the observed market price is the option price
         const strikePrice = row.strikePrice;
-        //const underlyingPrice = row.LTP
-        
+        const underlyingPrice = row.LTP
+        const optionPrice=bs.blackScholes(underlyingPrice, strikePrice, timeToMaturity, .2, riskFreeInterest, optionType); // 0.23834902311961947
         // console.log(props.underlyingPrice[0])
         console.log(strikePrice)
         console.log(riskFreeInterest)
         console.log(timeToMaturity)
-        const impliedVolatility = IV.getImpliedVolatility(optionPrice, 10000, strikePrice,timeToMaturity,riskFreeInterest,optionType);
+        const impliedVolatility = IV.getImpliedVolatility(optionPrice, underlyingPrice, strikePrice,timeToMaturity,riskFreeInterest,optionType);
         // const impliedVolatility=0;
         console.log(optionPrice)
         row.impliedVolatility = impliedVolatility;
@@ -147,14 +148,90 @@ function extractExpiryDate(dataframe) {
   }
   
   return (
-    <div>
-      {props.data.map((item) => (
-                        <p>
-                            {item.LTP}, {item.LTQ}
-                        </p>
-                    ))}
+    <div style={{display: "flex;", justifyContent: "space-around;"}}>
+      <h2>PUT:</h2>
+      <table>
+        <thead>
+        <tr>
+            <th>Strike Price</th>
+            <th>Expiry Date</th>
+            <th>Implied Volatility</th>
+            <th>LTQ</th>
+            <th>LTP</th>
+            <th>bestBid</th>
+            <th>bestAsk</th>
+            <th>bestBidQTY</th>
+            <th>bestAskQTY</th>
+            <th>totalTradedVolume</th>
+            <th>openInterest</th>
+            <th>prevClosePrice</th>
+            <th>prevOpenInterest</th>
+          </tr>
+        </thead>
+        <tbody>
+          {newDataframe.map((item) => (
+            <tr key={item.symbol}>
+              <td>{item.strikePrice}</td>
+              <td>{item.expiryDate}</td>
+              <td>{item.impliedVolatility}</td>
+              <td>{item.LTQ}</td>
+              <td>{item.LTP}</td>
+              <td>{item.bidPrice}</td>
+              <td>{item.askPrice}</td>
+              <td>{item.bidQuantity}</td>
+              <td>{item.askQuantity}</td>
+              <td>{item.volume}</td>
+              <td>{item.OI}</td>
+              <td>{item.previousClosePrice}</td>
+              <td>{item.previousOpenInterest}</td>
+              
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h2>CALL:</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Strike Price</th>
+            <th>Expiry Date</th>
+            <th>Implied Volatility</th>
+            <th>LTQ</th>
+            <th>LTP</th>
+            <th>bestBid</th>
+            <th>bestAsk</th>
+            <th>bestBidQTY</th>
+            <th>bestAskQTY</th>
+            <th>totalTradedVolume</th>
+            <th>openInterest</th>
+            <th>prevClosePrice</th>
+            <th>prevOpenInterest</th>
+          </tr>
+        </thead>
+        <tbody>
+          {originalDataframe.map((item) => (
+            <tr key={item.symbol}>
+              <td>{item.strikePrice}</td>
+              <td>{item.expiryDate}</td>
+              <td>{item.impliedVolatility}</td>
+              <td>{item.LTQ}</td>
+              <td>{item.LTP}</td>
+              <td>{item.bidPrice}</td>
+              <td>{item.askPrice}</td>
+              <td>{item.bidQuantity}</td>
+              <td>{item.askQuantity}</td>
+              <td>{item.volume}</td>
+              <td>{item.OI}</td>
+              <td>{item.previousClosePrice}</td>
+              <td>{item.previousOpenInterest}</td>
+              
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
-  )
+  );
 }
 
-export default Table
+export default Table;

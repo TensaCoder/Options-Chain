@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "financejs": "^4.1.0",
+    "black-scholes": "^1.1.0",
     "fs": "^0.0.1-security",
     "implied-volatility": "^1.0.0",
     "moment": "^2.29.4",

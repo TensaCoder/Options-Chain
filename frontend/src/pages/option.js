@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { io } from 'socket.io-client';
-import Table from '../components/Table'
+import TableComp from '../components/Table'
 let socket = io("http://localhost:4000")
 
 socket.on("connect", () => {
@@ -201,7 +201,7 @@ const Option = () => {
                 ))}
             </select>
 
-            <Table
+            <TableComp
             underlying={underlying}
             data={data}
             />
