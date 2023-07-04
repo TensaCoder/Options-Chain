@@ -17,28 +17,29 @@ const Option = () => {
     const [all, setall] = useState([])
     const [mid, setmid] = useState([])
     const [fin, setfin] = useState([])
-    const [underlying, setunderlying] = useState({})
+    const [underlying, setunderlying] = useState([[],[],[],[]])
 
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
             let currentData = dataArray[i];
 
-            // make a list (list =["MAINIDX", "FINANCIALS", etc]
-            
-            
-            console.log(currentData.symbol.toString()===symbol.toString())
-            if(currentData.symbol.toString()===symbol.toString()){
-                // iterate currentData.symbol over the list to check if u find a match using if ( currentData.symbol.includes(list[i}) == true && currentData.symbol.length() == list[i].length())
-
+            const names = ["MAINIDX", "FINANCIALS", "ALLBANKS", "MIDCAPS"];
+            console.log(currentData.symbol.toString().length === symbol.toString().length)
+            if(currentData.symbol.toString().length === symbol.toString().length){
+                for (let i=0;i<names.length; i++){
+                    if (currentData.symbol.includes(names[i]) && currentData.symbol.length === names[i].length) {
+                        setunderlying(prevUnderlying => {
+                            const updated = [...prevUnderlying];
+                            updated[i] = [currentData];
+                            return updated;
+                          })
+                        
                 // store the data in a array and not dictionary and use the logic from line 42 for finding new occurence and updating old one with new
-                setunderlying({
-                    [currentData.symbol]: currentData.LTP
-                  });
-                }
-
+            }
+        }
+    }
             
-    else{
-            if (currentData.symbol.startsWith("MA") && currentData.symbol!==symbol) {
+           else if (currentData.symbol.startsWith("MAINIDX") && currentData.symbol!==symbol) {
                 setmain(prevMain => {
                     const index = prevMain.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -49,7 +50,7 @@ const Option = () => {
                 });
             }
     
-            else if (currentData.symbol.startsWith("A") && currentData.symbol!==symbol) {
+            else if (currentData.symbol.startsWith("ALLBANKS") && currentData.symbol!==symbol) {
                 setall(prevAll => {
                     const index = prevAll.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -60,7 +61,7 @@ const Option = () => {
                 });
             }
     
-            else if (currentData.symbol.startsWith("MI") && currentData.length!==symbol) {
+            else if (currentData.symbol.startsWith("MIDCAPS") && currentData.length!==symbol) {
                 setmid(prevMid => {
                     const index = prevMid.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -70,7 +71,7 @@ const Option = () => {
                     }
                 });
             }
-            else if (currentData.symbol.startsWith("F") && currentData.symbol!==symbol) {
+            else if (currentData.symbol.startsWith("FINANCIALS") && currentData.symbol!==symbol) {
                 setfin(prevFin => {
                     const index = prevFin.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -80,7 +81,6 @@ const Option = () => {
                     }
                 });
             }
-        }
     }
         console.log("Length: ", data);
         console.log("UNDERLYING ",underlying)
