@@ -17,12 +17,19 @@ const Option = () => {
     const [all, setall] = useState([])
     const [mid, setmid] = useState([])
     const [fin, setfin] = useState([])
+    const [underlying, setunderlying] = useState({})
 
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
             let currentData = dataArray[i];
-    
-            if (currentData.symbol.startsWith("MA")) {
+            console.log(currentData.symbol.toString()===symbol.toString())
+            if(currentData.symbol.toString()===symbol.toString()){
+                setunderlying({
+                    [currentData.symbol]: currentData.LTP
+                  });
+                }
+    else{
+            if (currentData.symbol.startsWith("MA") && currentData.symbol!==symbol) {
                 setmain(prevMain => {
                     const index = prevMain.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -33,7 +40,7 @@ const Option = () => {
                 });
             }
     
-            else if (currentData.symbol.startsWith("A")) {
+            else if (currentData.symbol.startsWith("A") && currentData.symbol!==symbol) {
                 setall(prevAll => {
                     const index = prevAll.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -44,7 +51,7 @@ const Option = () => {
                 });
             }
     
-            else if (currentData.symbol.startsWith("MI")) {
+            else if (currentData.symbol.startsWith("MI") && currentData.length!==symbol) {
                 setmid(prevMid => {
                     const index = prevMid.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -54,7 +61,7 @@ const Option = () => {
                     }
                 });
             }
-            else if (currentData.symbol.startsWith("F")) {
+            else if (currentData.symbol.startsWith("F") && currentData.symbol!==symbol) {
                 setfin(prevFin => {
                     const index = prevFin.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -65,7 +72,9 @@ const Option = () => {
                 });
             }
         }
+    }
         console.log("Length: ", data);
+        console.log("UNDERLYING ",underlying)
     };
 
 
@@ -111,13 +120,13 @@ const Option = () => {
         <>
             <label for="option">Choose a symbol:</label>
             <select name="symbol" id="symbol" value={symbol} onChange={(event) => { setSymbol(event.target.value) }}>
-                <option value="MA">MAINIDX</option>
-                <option value="F">FINANCIALS</option>
-                <option value="A">ALLBANKS</option>
-                <option value="MI">MIDCAPS</option>
+                <option value="MAINIDX">MAINIDX</option>
+                <option value="FINANCIALS">FINANCIALS</option>
+                <option value="ALLBANKS">ALLBANKS</option>
+                <option value="MIDCAPS">MIDCAPS</option>
             </select>
 
-            {symbol === 'MA' && (
+            {symbol === 'MAINIDX' && (
                 <>
                     {main.map((item) => (
                         <p>
@@ -127,7 +136,7 @@ const Option = () => {
                 </>
             )}
 
-            {symbol === 'F' && (
+            {symbol === 'FINANCIALS' && (
                 <>
                     {fin.map((item) => (
                         <p>
@@ -137,7 +146,7 @@ const Option = () => {
                 </>
             )}
 
-            {symbol === 'A' && (
+            {symbol === 'ALLBANKS' && (
                 <>
                     {all.map((item) => (
                         <p>
@@ -147,7 +156,7 @@ const Option = () => {
                 </>
             )}
 
-            {symbol === 'MI' && (
+            {symbol === 'MIDCAPS' && (
                 <>
                     {mid.map((item) => (
                         <p>
