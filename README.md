@@ -1,98 +1,52 @@
-<div align="center" id="top"> 
-  <img src="./.github/app.gif" alt="Untitled Folder" />
 
-  &#xa0;
-
-  <!-- <a href="https://untitledfolder.netlify.app">Demo</a> -->
-</div>
-
-<h1 align="center">Untitled Folder</h1>
-
-<p align="center">
-  <img alt="Github top language" src="https://img.shields.io/github/languages/top/{{YOUR_GITHUB_USERNAME}}/untitled-folder?color=56BEB8">
-
-  <img alt="Github language count" src="https://img.shields.io/github/languages/count/{{YOUR_GITHUB_USERNAME}}/untitled-folder?color=56BEB8">
-
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/{{YOUR_GITHUB_USERNAME}}/untitled-folder?color=56BEB8">
-
-  <img alt="License" src="https://img.shields.io/github/license/{{YOUR_GITHUB_USERNAME}}/untitled-folder?color=56BEB8">
-
-  <!-- <img alt="Github issues" src="https://img.shields.io/github/issues/{{YOUR_GITHUB_USERNAME}}/untitled-folder?color=56BEB8" /> -->
-
-  <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/{{YOUR_GITHUB_USERNAME}}/untitled-folder?color=56BEB8" /> -->
-
-  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/{{YOUR_GITHUB_USERNAME}}/untitled-folder?color=56BEB8" /> -->
-</p>
-
-<!-- Status -->
-
-<!-- <h4 align="center"> 
-	🚧  Untitled Folder 🚀 Under construction...  🚧
-</h4> 
-
-<hr> -->
 
 <p align="center">
   <a href="#dart-about">About</a> &#xa0; | &#xa0; 
-  <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
-  <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
-  <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
+<!--   <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0; -->
   <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
-  <a href="#memo-license">License</a> &#xa0; | &#xa0;
-  <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">Author</a>
+<!--   <a href="#memo-license">License</a> &#xa0; | &#xa0;
+  <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">Author</a> -->
 </p>
 
 <br>
 
 ## :dart: About ##
+The Options Chain tool is a web application designed to display and analyze options data for various financial instruments. It provides users with a comprehensive view of option contracts available for a specific underlying asset, allowing them to make informed decisions based on the data presented.
 
-Describe your project
+Key Features:
 
-## :sparkles: Features ##
+Symbol and Expiry Selection: Users can choose the underlying symbol and expiration date from a dropdown menu. The available options are populated dynamically based on the provided data.
 
-:heavy_check_mark: Feature 1;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
+Sorting and Filtering: Users can sort the options table based on different columns such as strike price, LTP, OI, etc. This allows for easy identification of options with specific characteristics. Additionally, filtering options may be provided to narrow down the data based on user preferences.
 
-## :rocket: Technologies ##
+Real-time Updates: The tool utilizes real-time data updates to provide the latest information on option contracts. This ensures that users have access to the most current data for analysis and decision-making.
 
-The following tools were used in this project:
 
-- [Expo](https://expo.io/)
-- [Node.js](https://nodejs.org/en/)
-- [React](https://pt-br.reactjs.org/)
-- [React Native](https://reactnative.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-
-## :white_check_mark: Requirements ##
-
-Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Node](https://nodejs.org/en/) installed.
 
 ## :checkered_flag: Starting ##
 
 ```bash
 # Clone this project
-$ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/untitled-folder
+$ git clone [https://github.com/TensaCo](https://github.com/TensaCoder/Options-Chain.git)
 
 # Access
-$ cd untitled-folder
+$ cd Options-Chain
 
-# Install dependencies
-$ yarn
+# Go into Frontend folder
+cd frontend
+npm i
+npm run start
 
-# Run the project
-$ yarn start
+# Go into Backend folder
+cd backend
+npm i
+node temp.js
 
-# The server will initialize in the <http://localhost:3000>
+# run the feed-player-1.0.jar
+java -Ddebug=true -Dspeed="2" -classpath feed-play-1.0.jar hackathon.player.Main dataset.csv 9011
+
+
+
+# The frontend server will initialize in the <http://localhost:3000/app/options>
 ```
 
-## :memo: License ##
-
-This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
-
-
-Made with :heart: by <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">{{YOUR_NAME}}</a>
-
-&#xa0;
-
-<a href="#top">Back to top</a>
