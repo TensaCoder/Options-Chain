@@ -52,7 +52,7 @@ const Option = () => {
             }
 
 
-            if (currentData.symbol.startsWith("MAINIDX") && currentData.symbol > "MAINIDX".length) {
+            if (currentData.symbol.startsWith("MAINIDX") && currentData.length > "MAINIDX".length) {
                 setmain(prevMain => {
                     const index = prevMain.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -96,7 +96,7 @@ const Option = () => {
             }
         }
         // console.log("Length: ", data);
-        console.log("UNDERLYING ", underlying)
+        // console.log("UNDERLYING ", underlying)
     };
 
     socket.on("option-data", (jsonArray) => {
@@ -109,26 +109,46 @@ const Option = () => {
 
     // will execute when the expiry date column is selected and will remove the expiry data from there and send it to the frontend -> use the "data" useState to store the value
 
+    const sortData = (dataArray) => {
+        return [...dataArray].sort((a, b) => {
+            const valueA = extractValue(a.symbol);
+            const valueB = extractValue(b.symbol);
+            return valueA.localeCompare(valueB);
+          });
+    };
+
+    const extractValue = (symbol) => {
+        // Extract the value from the symbol string based on TTM
+        const ttmIndex = symbol.indexOf(TTM);
+        let endIndex = ttmIndex + TTM.length;
+        while (endIndex < symbol.length && !isNaN(symbol[endIndex])) {
+            endIndex++;
+        }
+        const value = symbol.slice(ttmIndex + TTM.length, endIndex);
+        return value;
+    };
+
     let seperateData = (dataArray) => {
         // const filteredData = dataArray.filter(item => item.symbol.includes(TTM));
         let filteredArray = dataArray.filter((item) => {
-            console.log("item: ", item)
+            // console.log("item: ", item)
             if (item.symbol.includes(TTM)) {
-                console.log("item: ", item)
+                // console.log("item: ", item)
                 return item;
             }
         });
+        filteredArray = sortData(filteredArray)
         console.log("Filtered Data : ", filteredArray)
         setData(filteredArray);
     }
 
     let dataArray = []
     useEffect(() => {
-        if (symbol == "MAINIDX") {
-            dataArray = main;
-        }
-        else if (symbol == "FINANCIALS") {
+        if (symbol == "FINANCIALS") {
             dataArray = fin;
+        }
+        else if (symbol == "MAINIDX") {
+            dataArray = main;
         }
         else if (symbol == "ALLBANKS") {
             dataArray = all;
@@ -136,33 +156,19 @@ const Option = () => {
         else if (symbol == "MIDCAP") {
             dataArray = mid;
         }
-        console.log("Displaying data of : ", symbol)
+        // console.log("Displaying data of : ", symbol)
         seperateData(dataArray);
-        console.log("DATA : ", data)
+        // console.log("DATA : ", data)
 
     }, [symbol, TTM])
 
-    // setInterval(() => {
-    //     if (symbol=="MAINIDX"){
-    //         dataArray=main;
-    //     }
-    //     else if (symbol=="FINANCIALS"){
-    //         dataArray=fin;
-    //     }
-    //     else if (symbol=="ALLBANKS"){
-    //         dataArray=all;
-    //     }
-    //     else if (symbol=="MIDCAPS"){
-    //         dataArray=mid;
-    //     }
-    //     seperateData(dataArray);
+    // function myFunction() {
+    //     setTTM("13JUL23");
+    //     setTTM("06JUL23");
+    // }
 
-    // }, 5000);
+    // setTimeout(myFunction, 1000);
 
-    // setInterval(() => {
-    //     console.log("DATA : ", data)
-
-    // }, 5000);
 
 
     return (
