@@ -1,7 +1,8 @@
+import logo from './logo.svg';
+import './App.css';
 import React from 'react';
-import Options from './pages/option'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Options from './pages/Option'
+import Options from './pages/option'
 
 function App() {
   return (
@@ -10,7 +11,6 @@ function App() {
     <Route path="/options" element={<Options />} />
     </Routes>
   </BrowserRouter>
-
   );
 }
 
