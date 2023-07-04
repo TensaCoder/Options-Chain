@@ -22,12 +22,21 @@ const Option = () => {
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
             let currentData = dataArray[i];
+
+            // make a list (list =["MAINIDX", "FINANCIALS", etc]
+            
+            
             console.log(currentData.symbol.toString()===symbol.toString())
             if(currentData.symbol.toString()===symbol.toString()){
+                // iterate currentData.symbol over the list to check if u find a match using if ( currentData.symbol.includes(list[i}) == true && currentData.symbol.length() == list[i].length())
+
+                // store the data in a array and not dictionary and use the logic from line 42 for finding new occurence and updating old one with new
                 setunderlying({
                     [currentData.symbol]: currentData.LTP
                   });
                 }
+
+            
     else{
             if (currentData.symbol.startsWith("MA") && currentData.symbol!==symbol) {
                 setmain(prevMain => {
