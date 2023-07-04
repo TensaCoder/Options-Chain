@@ -11,7 +11,7 @@ const Option = () => {
 
     const [data, setData] = useState([])
     const [symbol, setSymbol] = useState("MAINIDX")
-    // const [TTM, setTTM] = useState("06JUL23");
+    const [TTM, setTTM] = useState('11JUL23');
     // const [optionType, setOptionType] = useState("CE")
     const [main, setmain] = useState([])
     const [all, setall] = useState([])
@@ -20,6 +20,12 @@ const Option = () => {
     const [underlying, setunderlying] = useState([])
 
     const names = ["MAINIDX", "FINANCIALS", "ALLBANKS", "MIDCAPS"];
+    const dates = {
+        "MAINIDX": ['06JUL23', '13JUL23', '20JUL23', '27JUL23', '03AUG23', '31AUG23', '28SEP23', '26OCT23', '28DEC23', '25JUN26', '26JUN25', '27JUN24', '28MAR24', '26DEC24', '25DEC25', '31DEC26', '30DEC27', '24JUN27'],
+        "FINANCIALS": ['04JUL23', '11JUL23', '18JUL23', '25JUL23', '29AUG23', '26SEP23'],
+        "MIDCAP": ['05JUL23', '26JUL23'],
+        "ALLBANKS": ['06JUL23', '13JUL23', '20JUL23', '27JUL23', '03AUG23', '28SEP23', '31AUG23', '26OCT23', '28DEC23']
+    }
 
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
@@ -29,9 +35,9 @@ const Option = () => {
 
 
             for (let i = 0; i < names.length; i++) {
-                if (currentData.symbol.toString().length === names[i].length) {
-                    // console.log(currentData)
-                }
+                // if (currentData.symbol.toString().length === names[i].length) {
+                //     // console.log(currentData)
+                // }
                 if (currentData.symbol.includes(names[i]) && currentData.symbol.length === names[i].length) {
                     setunderlying(prevUnderlying => {
                         const index = prevUnderlying.findIndex((item) => item.symbol === currentData.symbol);
@@ -46,7 +52,7 @@ const Option = () => {
             }
 
 
-            if (currentData.symbol.startsWith("MAINIDX") && currentData.symbol !== symbol) {
+            if (currentData.symbol.startsWith("MAINIDX") && currentData.symbol > "MAINIDX".length) {
                 setmain(prevMain => {
                     const index = prevMain.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -68,7 +74,7 @@ const Option = () => {
                 });
             }
 
-            else if (currentData.symbol.startsWith("MIDCAPS") && currentData.symbol.length > "MIDCAPS".length) {
+            else if (currentData.symbol.startsWith("MIDCAP") && currentData.symbol.length > "MIDCAP".length) {
                 setmid(prevMid => {
                     const index = prevMid.findIndex((item) => item.symbol === currentData.symbol);
                     if (index !== -1) {
@@ -102,25 +108,103 @@ const Option = () => {
     })
 
     // will execute when the expiry date column is selected and will remove the expiry data from there and send it to the frontend -> use the "data" useState to store the value
-    setInterval(() => {
-        let seperateData = () => {
-    
+
+    let seperateData = (dataArray) => {
+        // const filteredData = dataArray.filter(item => item.symbol.includes(TTM));
+        let filteredArray = dataArray.filter((item) => {
+            console.log("item: ", item)
+            if (item.symbol.includes(TTM)) {
+                console.log("item: ", item)
+                return item;
+            }
+        });
+        console.log("Filtered Data : ", filteredArray)
+        setData(filteredArray);
+    }
+
+    let dataArray = []
+    useEffect(() => {
+        if (symbol == "MAINIDX") {
+            dataArray = main;
         }
-        
-    }, 5000);
+        else if (symbol == "FINANCIALS") {
+            dataArray = fin;
+        }
+        else if (symbol == "ALLBANKS") {
+            dataArray = all;
+        }
+        else if (symbol == "MIDCAP") {
+            dataArray = mid;
+        }
+        console.log("Displaying data of : ", symbol)
+        seperateData(dataArray);
+        console.log("DATA : ", data)
+
+    }, [symbol, TTM])
+
+    // setInterval(() => {
+    //     if (symbol=="MAINIDX"){
+    //         dataArray=main;
+    //     }
+    //     else if (symbol=="FINANCIALS"){
+    //         dataArray=fin;
+    //     }
+    //     else if (symbol=="ALLBANKS"){
+    //         dataArray=all;
+    //     }
+    //     else if (symbol=="MIDCAPS"){
+    //         dataArray=mid;
+    //     }
+    //     seperateData(dataArray);
+
+    // }, 5000);
+
+    // setInterval(() => {
+    //     console.log("DATA : ", data)
+
+    // }, 5000);
 
 
     return (
         <>
             <label htmlFor="option">Choose a symbol:</label>
-            <select name="symbol" id="symbol" value={symbol} onChange={(event) => { setSymbol(event.target.value) }}>
+            <select name="symbol" id="symbol" value={symbol} onChange={(event) => {
+                const selectedSymbol = event.target.value;
+                setSymbol(selectedSymbol);
+                setTTM(dates[selectedSymbol][0]);
+            }}>
                 <option value="MAINIDX">MAINIDX</option>
                 <option value="FINANCIALS">FINANCIALS</option>
                 <option value="ALLBANKS">ALLBANKS</option>
-                <option value="MIDCAPS">MIDCAPS</option>
+                <option value="MIDCAP">MIDCAP</option>
             </select>
 
-            {symbol === 'MAINIDX' && (
+
+            {/* <label htmlFor="option">Choose a TTM:</label>
+            <select name="TTM" id="TTM" value={TTM} onChange={(event) => { setTTM(event.target.value) }}>
+                <option value="06JUL23">06-Jul-2023</option>
+                <option value="11JUL23">13-Jul-2023</option>
+                <option value="20JUL23">20-Jul-2023</option>
+                <option value="27JUL23">27-Jul-2023</option>
+                <option value="03AUG23">03-Aug-2023</option>
+                <option value="31AUG23">31-Aug-2023</option>
+
+            </select> */}
+            <label htmlFor="option">Choose a TTM:</label>
+            <select name="TTM" id="TTM" value={TTM} onChange={handleTTMChange}>
+                {dates[symbol].map((ttm) => (
+                    <option key={ttm} value={ttm}>{ttm}</option>
+                ))}
+            </select>
+
+            {data.map((item) => (
+                <p>
+                    {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
+                </p>
+            ))
+            }
+
+            {/* {symbol === 'MAINIDX' && (
                 <>
                     {main.map((item) => (
                         <p>
@@ -158,7 +242,7 @@ const Option = () => {
                         </p>
                     ))}
                 </>
-            )}
+            )} */}
         </>
     );
 }
