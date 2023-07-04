@@ -17,113 +17,81 @@ const Option = () => {
     const [all, setall] = useState([])
     const [mid, setmid] = useState([])
     const [fin, setfin] = useState([])
+    const [underlying, setunderlying] = useState([])
+
+    const names = ["MAINIDX", "FINANCIALS", "ALLBANKS", "MIDCAPS"];
+
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
-          let currentData = dataArray[i];
-      
-          if (!currentData.symbol.startsWith(symbol)) {
-            continue;
-          }
-          if (currentData.symbol.includes(TTM) !== true) {
-            continue;
-          }
-          if (currentData.symbol.includes(optionType) !== true) {
-            continue;
-          }
-      
-          console.log("Symbol name: ", currentData.symbol);
 
-      
-        if(symbol.startsWith("MA")){
-            const exist_data = main.findIndex((item) => item.symbol === currentData.symbol);
-          if (exist_data !== -1) {
-            setmain((prevData) => {
-              const newData = [...prevData];
-              newData[exist_data] = currentData;
-              return newData;
-            });
-          } else {
+            let currentData = dataArray[i];
+            currentData.symbol = currentData.symbol.replace(/\x00/g, '');
 
-            setmain((prevData) => [...prevData, currentData]);
-          }
+
+            for (let i = 0; i < names.length; i++) {
+                if (currentData.symbol.toString().length === names[i].length) {
+                    // console.log(currentData)
+                }
+                if (currentData.symbol.includes(names[i]) && currentData.symbol.length === names[i].length) {
+                    setunderlying(prevUnderlying => {
+                        const index = prevUnderlying.findIndex((item) => item.symbol === currentData.symbol);
+                        if (index !== -1) {
+                            return prevUnderlying.map((item, itemIndex) => itemIndex === index ? currentData : item);
+                        } else {
+                            return [...prevUnderlying, currentData];
+                        }
+                    });
+
+                }
+            }
+
+
+            if (currentData.symbol.startsWith("MAINIDX") && currentData.symbol !== symbol) {
+                setmain(prevMain => {
+                    const index = prevMain.findIndex((item) => item.symbol === currentData.symbol);
+                    if (index !== -1) {
+                        return prevMain.map((item, itemIndex) => itemIndex === index ? currentData : item);
+                    } else {
+                        return [...prevMain, currentData];
+                    }
+                });
+            }
+
+            else if (currentData.symbol.startsWith("ALLBANKS") && currentData.symbol.length > "ALLBANKS".length) {
+                setall(prevAll => {
+                    const index = prevAll.findIndex((item) => item.symbol === currentData.symbol);
+                    if (index !== -1) {
+                        return prevAll.map((item, itemIndex) => itemIndex === index ? currentData : item);
+                    } else {
+                        return [...prevAll, currentData];
+                    }
+                });
+            }
+
+            else if (currentData.symbol.startsWith("MIDCAPS") && currentData.symbol.length > "MIDCAPS".length) {
+                setmid(prevMid => {
+                    const index = prevMid.findIndex((item) => item.symbol === currentData.symbol);
+                    if (index !== -1) {
+                        return prevMid.map((item, itemIndex) => itemIndex === index ? currentData : item);
+                    } else {
+                        return [...prevMid, currentData];
+                    }
+                });
+            }
+            else if (currentData.symbol.startsWith("FINANCIALS") && currentData.symbol.length > "FINANCIALS".length) {
+                setfin(prevFin => {
+                    const index = prevFin.findIndex((item) => item.symbol === currentData.symbol);
+                    if (index !== -1) {
+                        return prevFin.map((item, itemIndex) => itemIndex === index ? currentData : item);
+                    } else {
+                        return [...prevFin, currentData];
+                    }
+                });
+            }
         }
-
-        if(symbol.startsWith("A")){
-            const exist_data = all.findIndex((item) => item.symbol === currentData.symbol);
-            if (exist_data !== -1) {
-              setall((prevData) => {
-                const newData = [...prevData];
-                newData[exist_data] = currentData;
-                return newData;
-              });
-            } else {
-    
-              setall((prevData) => [...prevData, currentData]);
-            }
-          }
-
-          if(symbol.startsWith("MI")){
-            const exist_data = mid.findIndex((item) => item.symbol === currentData.symbol);
-            if (exist_data !== -1) {
-              setmid((prevData) => {
-                const newData = [...prevData];
-                newData[exist_data] = currentData;
-                return newData;
-              });
-            } else {
-    
-              setmid((prevData) => [...prevData, currentData]);
-            }
-          }
-
-          if(symbol.startsWith("F")){
-            const exist_data = fin.findIndex((item) => item.symbol === currentData.symbol);
-            if (exist_data !== -1) {
-              setfin((prevData) => {
-                const newData = [...prevData];
-                newData[exist_data] = currentData;
-                return newData;
-              });
-            } else {
-    
-              setfin((prevData) => [...prevData, currentData]);
-            }
-          }
-
-    }
-      
-        console.log("Length: ", data);
-      };
-
-
-      
-
-    // setInterval(() => {
-    //     for (let i = 0; i < data.length; i++) {
-    //         let currentData = dataArray[i];
-    //         let timeStamp = currentData.timeStamp;
-
-    //         if (currentData.timeStamp) {
-    //             console.log("Symbol name : ", currentData.symbol)
-    //             setData(prevData => [...prevData, currentData])
-    //         }
-    //     }
-        
-    // }, 40000);
-
-    // useEffect(() => {
-
-    //     const callback = (datas) => {
-    //         setData(prevData => [...prevData, datas])
-    //         console.log("Setting the data usestate")
-    //     };
-
-
-
-    //     // return () => {
-    //     //     socket.off("option-data", callback);
-    //     // };
-    // }, [])
+        // console.log("Length: ", data);
+        console.log("UNDERLYING ", underlying)
+    };
 
     socket.on("option-data", (jsonArray) => {
         // callback(jsonArray)
@@ -144,13 +112,13 @@ const Option = () => {
 
     return (
         <>
-           <label for="option">Choose a symbol:</label>
-<select name="symbol" id="symbol" value={symbol} onChange={(event) => { setSymbol(event.target.value) }}>
-  <option value="MA">MAINIDX</option>
-  <option value="F">FINANCIALS</option>
-  <option value="A">ALLBANKS</option>
-  <option value="MI">MIDCAPS</option>
-</select>
+            <label htmlFor="option">Choose a symbol:</label>
+            <select name="symbol" id="symbol" value={symbol} onChange={(event) => { setSymbol(event.target.value) }}>
+                <option value="MAINIDX">MAINIDX</option>
+                <option value="FINANCIALS">FINANCIALS</option>
+                <option value="ALLBANKS">ALLBANKS</option>
+                <option value="MIDCAPS">MIDCAPS</option>
+            </select>
 
             {symbol === 'MAINIDX' && (
                 <>
