@@ -191,7 +191,7 @@ const Option = () => {
 
             </select> */}
             <label htmlFor="option">Choose a TTM:</label>
-            <select name="TTM" id="TTM" value={TTM} onChange={handleTTMChange}>
+            <select name="TTM" id="TTM" value={TTM} onChange={(event) => { setTTM(event.target.value) }}>
                 {dates[symbol].map((ttm) => (
                     <option key={ttm} value={ttm}>{ttm}</option>
                 ))}
