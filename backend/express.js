@@ -5,8 +5,8 @@ const net = require('net');
 // Define the server address and port
 const serverAddress = 'localhost';
 const serverPort = 9013;
-
-let jsonData = [];
+let newData=[]
+let jsonData=[]
 
 // Create a TCP client socket
 const clientSocket = new net.Socket();
@@ -21,124 +21,106 @@ clientSocket.connect(serverPort, serverAddress, () => {
 });
 
 // Handle data received from the server
-clientSocket.on('data', async (data) => {
-  console.log("Data package length : " + data.length)
+clientSocket.on('data', (data) => {
+  console.log("Data package length: " + data.length)
 
-  console.log("Data package length : " + data.length)
+  newData.push(...data); 
 
-//   var logger = fs.createWriteStream('log.txt', {
-//       flags: 'a' // 'a' means appending (old data will be preserved)
-//   })
+  while (newData.length >= 130) {
+    const temp = newData.slice(0, 130);
+    newData = newData.slice(130);
 
-  // Iterate over the buffer in chunks of 4 bytes (assuming 32-bit little-endian integers)
-  for (let i = 0; i < data.length; i += 130) {
+    console.log(temp.length)
+    let length = Buffer.from(temp.slice(0, 4))
 
-      let temp = await data.slice(i, i + 130);
-      if (temp.length != 130) {
-          console.log("Temp length : " + temp.length)
-          continue;
-      }
+    console.log(length)
+    length = length.readInt32LE(0);
 
-      console.log(temp.length)
-      let length = temp.slice(0, 4)
+    console.log("length " +length);
 
-      console.log(length)
-      length = length.readInt32LE(0);
+    let symbol = Buffer.from(temp.slice(4, 34));
+    symbol = symbol.toString('utf-8');
+    console.log("symbol "+ symbol)
 
-      console.log("length " +length);
+    let sequenceNumber = Buffer.from(temp.slice(34, 42));
+    sequenceNumber = sequenceNumber.readBigInt64LE();
+    sequenceNumber = sequenceNumber.toString()
+    console.log("seq no " +sequenceNumber)
 
-      let symbol = temp.slice(4, 34);
-      symbol = symbol.toString('utf-8');
-      console.log("symbol "+ symbol)
+    let timeStamp = Buffer.from(temp.slice(42, 50));
+    timeStamp = timeStamp.readBigInt64LE();
+    timeStamp = timeStamp.toString()
+    console.log(timeStamp)
 
-      let sequenceNumber = temp.slice(34, 42);
-      sequenceNumber = sequenceNumber.readBigInt64LE();
-      sequenceNumber = sequenceNumber.toString()
-      console.log("seq no " +sequenceNumber)
+    let LTP = Buffer.from(temp.slice(50, 58));
+    LTP = LTP.readBigInt64LE();
+    LTP = LTP.toString()
+    console.log("LTP : " + LTP)
 
-      let timeStamp = temp.slice(42, 50);
-      timeStamp = timeStamp.readBigInt64LE();
-      timeStamp = timeStamp.toString()
-      console.log(timeStamp)
+    let LTQ = Buffer.from(temp.slice(58, 66));
+    LTQ = LTQ.readBigInt64LE();
+    LTQ = LTQ.toString()
+    console.log("LTQ : " + LTQ)
 
-      let LTP = temp.slice(50, 58);
-      LTP = LTP.readBigInt64LE();
-      LTP = LTP.toString()
-      console.log("LTP : " + LTP)
+    let volume = Buffer.from(temp.slice(66, 74));
+    volume = volume.readBigInt64LE();
+    volume = volume.toString()
+    console.log("volume : " + volume)
 
-      let LTQ = temp.slice(58, 66);
-      LTQ = LTQ.readBigInt64LE();
-      LTQ = LTQ.toString()
-      console.log("LTQ : " + LTQ)
+    let bidPrice = Buffer.from(temp.slice(74, 82));
+    bidPrice = bidPrice.readBigInt64LE();
+    bidPrice = bidPrice.toString()
+    console.log("bidPrice : " + bidPrice)
 
-      let volume = temp.slice(66, 74);
-      volume = volume.readBigInt64LE();
-      volume = volume.toString()
-      console.log("volume : " + volume)
+    let bidQuantity = Buffer.from(temp.slice(82, 90));
+    bidQuantity = bidQuantity.readBigInt64LE();
+    bidQuantity = bidQuantity.toString()
+    console.log("bidQuantity : " + bidQuantity)
 
-      let bidPrice = temp.slice(74, 82);
-      bidPrice = bidPrice.readBigInt64LE();
-      bidPrice = bidPrice.toString()
-      console.log("bidPrice : " + bidPrice)
+    let askPrice = Buffer.from(temp.slice(90, 98));
+    askPrice = askPrice.readBigInt64LE();
+    askPrice = askPrice.toString()
+    console.log("askPrice : " + askPrice)
 
-      let bidQuantity = temp.slice(82, 90);
-      bidQuantity = bidQuantity.readBigInt64LE();
-      bidQuantity = bidQuantity.toString()
-      console.log("bidQuantity : " + bidQuantity)
+    let askQuantity = Buffer.from(temp.slice(98, 106));
+    askQuantity = askQuantity.readBigInt64LE();
+    askQuantity = askQuantity.toString()
+    console.log("askQuantity : " + askQuantity)
 
-      let askPrice = temp.slice(90, 98);
-      askPrice = askPrice.readBigInt64LE();
-      askPrice = askPrice.toString()
-      console.log("askPrice : " + askPrice)
+    let OI = Buffer.from(temp.slice(106, 114));
+    OI = OI.readBigInt64LE();
+    OI = OI.toString()
+    console.log("OI : " + OI)
 
-      let askQuantity = temp.slice(98, 106);
-      askQuantity = askQuantity.readBigInt64LE();
-      askQuantity = askQuantity.toString()
-      console.log("askQuantity : " + askQuantity)
+    let previousClosePrice = Buffer.from(temp.slice(114, 122));
+    previousClosePrice = previousClosePrice.readBigInt64LE();
+    previousClosePrice = previousClosePrice.toString()
+    console.log("previousClosePrice : " + previousClosePrice)
 
-      let OI = temp.slice(106, 114);
-      OI = OI.readBigInt64LE();
-      OI = OI.toString()
-      console.log("OI : " + OI)
+    let previousOpenInterest = Buffer.from(temp.slice(122, 130));
+    previousOpenInterest = previousOpenInterest.readBigInt64LE();
+    previousOpenInterest = previousOpenInterest.toString()
+    console.log("previousOpenInterest : " + previousOpenInterest)
 
-      let previousClosePrice = temp.slice(114, 122);
-      previousClosePrice = previousClosePrice.readBigInt64LE();
-      previousClosePrice = previousClosePrice.toString()
-      console.log("previousClosePrice : " + previousClosePrice)
+    const dataObject = {
+      length,
+      symbol,
+      sequenceNumber,
+      timeStamp,
+      LTP,
+      LTQ,
+      volume,
+      bidPrice,
+      bidQuantity,
+      askPrice,
+      askQuantity,
+      OI,
+      previousClosePrice,
+      previousOpenInterest
+    };
 
-      let previousOpenInterest = temp.slice(122, 130);
-      previousOpenInterest = previousOpenInterest.readBigInt64LE();
-      previousOpenInterest = previousOpenInterest.toString()
-      console.log("previousOpenInterest : " + previousOpenInterest)
-
-
-      jsonData.push({
-          length: length,
-          symbol: symbol,
-          sequenceNumber: sequenceNumber,
-          timeStamp: timeStamp,
-          LTP: LTP,
-          LTQ: LTQ,
-          volume: volume,
-          bidPrice: bidPrice,
-          bidQuantity: bidQuantity,
-          askPrice: askPrice,
-          askQuantity: askQuantity,
-          OI: OI,
-          previousClosePrice: previousClosePrice,
-          previousOpenInterest: previousOpenInterest
-      });
-
-      
-      
+    jsonData.push(dataObject);
   }
-//   logger.write(JSON.stringify(jsonData) + "\n") // append string to your file
-  // jsonData=[]
-  // module.exports = {
-  //     jsonData
-  //   };
-  // console.log(jsonData);
-
 });
 
 // Handle connection close
@@ -151,6 +133,7 @@ clientSocket.on('error', (error) => {
   console.error('Error connecting to the server:', error);
 });
 
+
 app.get('/events', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Content-Type', 'text/event-stream');
@@ -158,20 +141,21 @@ app.get('/events', (req, res) => {
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
 
-  const sendData = () => {
-    res.write(`data: ${JSON.stringify(jsonData)}\n\n`);
-  };
+    const sendData = () => {
+      if (jsonData.length > 0) {
+        res.write(`data: ${JSON.stringify(jsonData)}\n\n`);
+        jsonData = []; 
+      }
+    };
 
-  // Send the current data immediately when a client connects
-  sendData();
+    sendData();
 
-  // Update the data every second and send it to the client
-  const intervalId = setInterval(sendData, 1000);
+    const intervalId = setInterval(sendData, 1000);
 
-  // When the client closes the connection, stop sending updates
-  req.on('close', () => {
-    clearInterval(intervalId);
-  });
+    req.on('close', () => {
+      clearInterval(intervalId);
+    });
+
 });
 
 app.listen(5000, () => {
