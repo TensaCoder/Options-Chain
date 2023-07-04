@@ -18,6 +18,8 @@ const Option = () => {
     const [mid, setmid] = useState([])
     const [fin, setfin] = useState([])
     const [underlying, setunderlying] = useState([])
+    // let currentUnderLyingValue = 0;
+    // const [currentUnderLyingValue, setcurrentUnderLyingValue] = useState(0)
 
     const names = ["MAINIDX", "FINANCIALS", "ALLBANKS", "MIDCAPS"];
     const dates = {
@@ -113,7 +115,7 @@ const Option = () => {
             const valueA = extractValue(a.symbol);
             const valueB = extractValue(b.symbol);
             return valueA.localeCompare(valueB);
-          });
+        });
     };
 
     const extractValue = (symbol) => {
@@ -161,6 +163,26 @@ const Option = () => {
 
     }, [symbol, TTM])
 
+    // useEffect(() => {
+    //     for (let i=0; i<names.length; i++){
+    //         if (names[i].includes(symbol) == true){
+    //             currentUnderLyingValue = underlying.filter(()=>{
+    //                 return underlying.symbol == names[i]
+    //             })
+    //         }
+    //     }
+    //     // currentUnderLyingValue = underlying.filter(()=>{
+    //     //     return underlying.symbol.includes(symbol)
+    //     // })
+
+
+    // }, [symbol])
+    // useEffect(() => {
+    //     const filteredUnderlying = underlying.filter(item => item.symbol.includes(symbol));
+    //     setcurrentUnderLyingValue(filteredUnderlying);
+    // }, [symbol, underlying]);
+
+
     // function myFunction() {
     //     setTTM("13JUL23");
     //     setTTM("06JUL23");
@@ -184,16 +206,6 @@ const Option = () => {
                 <option value="MIDCAP">MIDCAP</option>
             </select>
 
-
-            {/* <label htmlFor="option">Choose a TTM:</label>
-            <select name="TTM" id="TTM" value={TTM} onChange={(event) => { setTTM(event.target.value) }}>
-                <option value="06JUL23">06-Jul-2023</option>
-                <option value="11JUL23">13-Jul-2023</option>
-                <option value="20JUL23">20-Jul-2023</option>
-                <option value="27JUL23">27-Jul-2023</option>
-                <option value="03AUG23">03-Aug-2023</option>
-                <option value="31AUG23">31-Aug-2023</option>
-            </select> */}
             <label htmlFor="option">Choose a TTM:</label>
             <select name="TTM" id="TTM" value={TTM} onChange={(event) => { setTTM(event.target.value) }}>
                 {dates[symbol].map((ttm) => (
@@ -201,50 +213,14 @@ const Option = () => {
                 ))}
             </select>
 
+
             <TableComp
             underlying={underlying}
             data={data}
             />
+              
+            
 
-            {/* {symbol === 'MAINIDX' && (
-                <>
-                    {main.map((item) => (
-                        <p>
-                            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-                        </p>
-                    ))}
-                </>
-            )}
-
-            {symbol === 'FINANCIALS' && (
-                <>
-                    {fin.map((item) => (
-                        <p>
-                            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-                        </p>
-                    ))}
-                </>
-            )}
-
-            {symbol === 'ALLBANKS' && (
-                <>
-                    {all.map((item) => (
-                        <p>
-                            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-                        </p>
-                    ))}
-                </>
-            )}
-
-            {symbol === 'MIDCAPS' && (
-                <>
-                    {mid.map((item) => (
-                        <p>
-                            {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-                        </p>
-                    ))}
-                </>
-            )} */}
         </>
     );
 }
