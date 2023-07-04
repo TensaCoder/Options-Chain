@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { io } from 'socket.io-client';
-
+import Table from '../components/Table'
 let socket = io("http://localhost:4000")
 
 socket.on("connect", () => {
@@ -29,7 +29,6 @@ const Option = () => {
 
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
-
             let currentData = dataArray[i];
             currentData.symbol = currentData.symbol.replace(/\x00/g, '');
 
@@ -194,7 +193,6 @@ const Option = () => {
                 <option value="27JUL23">27-Jul-2023</option>
                 <option value="03AUG23">03-Aug-2023</option>
                 <option value="31AUG23">31-Aug-2023</option>
-
             </select> */}
             <label htmlFor="option">Choose a TTM:</label>
             <select name="TTM" id="TTM" value={TTM} onChange={(event) => { setTTM(event.target.value) }}>
@@ -203,12 +201,10 @@ const Option = () => {
                 ))}
             </select>
 
-            {data.map((item) => (
-                <p>
-                    {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-                </p>
-            ))
-            }
+            <Table
+            underlying={underlying}
+            data={data}
+            />
 
             {/* {symbol === 'MAINIDX' && (
                 <>
