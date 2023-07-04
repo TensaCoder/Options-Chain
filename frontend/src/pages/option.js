@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { io } from 'socket.io-client';
-
+import TableComp from '../components/Table'
 let socket = io("http://localhost:4000")
 
 socket.on("connect", () => {
@@ -31,7 +31,6 @@ const Option = () => {
 
     let cleanData = (dataArray) => {
         for (let i = 0; i < dataArray.length; i++) {
-
             let currentData = dataArray[i];
             currentData.symbol = currentData.symbol.replace(/\x00/g, '');
 
@@ -207,7 +206,6 @@ const Option = () => {
                 <option value="MIDCAP">MIDCAP</option>
             </select>
 
-
             <label htmlFor="option">Choose a TTM:</label>
             <select name="TTM" id="TTM" value={TTM} onChange={(event) => { setTTM(event.target.value) }}>
                 {dates[symbol].map((ttm) => (
@@ -215,16 +213,13 @@ const Option = () => {
                 ))}
             </select>
 
-            <div className='div'>
-                underlying value : 
-            </div>
 
-            {data.map((item) => (
-                <p>
-                    {item.sequenceNumber},{item.symbol}, {item.timeStamp}, {item.LTP}, {item.LTQ}, {item.volume}
-                </p>
-            ))
-            }
+            <TableComp
+            underlying={underlying}
+            data={data}
+            />
+              
+            
 
         </>
     );
